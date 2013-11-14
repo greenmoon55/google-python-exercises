@@ -31,11 +31,20 @@ def read_urls(filename):
     print 'hostname error'
     sys.exit(1)
 
+  def custom_sort(url):
+    match = re.search(r'-\w+-(\w+).jpg$', url)
+    return match.group(1)
+
   file = open(filename, 'r')
   urls = re.findall(r'GET (\S+) HTTP', file.read())
-  urls = sorted(set(urls))
-  urls = ['http://' + hostname + url for url in urls if re.search(r'puzzle', url)]
+  urls = [url for url in urls if re.search(r'puzzle', url)]
+  if re.search(r'-\w+-\w+.jpg$', urls[0]):
+    urls = sorted(set(urls), key=custom_sort) 
+  else:
+    urls = sorted(set(urls))
+  urls = ['http://' + hostname + url for url in urls]
   return urls
+
   
   
 
