@@ -35,6 +35,19 @@ def copy_to(paths, dir):
   return
 
 def zip_to(paths, zippath):
+  print "Command I'm going to do:",
+  cmd = 'zip -j ' + zippath
+  for path in paths:
+    special_paths = get_special_paths(path)
+    for special_path in special_paths:
+      cmd += ' ' + special_path
+  print cmd
+  (status, output) = commands.getstatusoutput(cmd)
+  if status:
+    sys.stderr.write(output)
+    print
+    sys.exit(1)
+  print output
   return
 
 
@@ -71,6 +84,8 @@ def main():
   # Call your functions
   if todir:
     copy_to(args, todir)
+  elif tozip:
+    zip_to(args, tozip)
   else:
     for dir in args:
       for path in get_special_paths(dir):
