@@ -20,7 +20,8 @@ import commands
 def get_special_paths(dir):
   filenames = os.listdir(dir)
   for filename in filenames:
-    print os.path.abspath(os.path.join(dir, filename)) # absolute path
+    if re.search(r'__\w+__', filename): 
+      print os.path.abspath(os.path.join(dir, filename)) # absolute paths
   return
 
 
