@@ -28,7 +28,7 @@ def read_urls(filename):
   if match:
     hostname = match.group(1)
   else:
-    print 'error'
+    print 'hostname error'
     sys.exit(1)
 
   file = open(filename, 'r')
@@ -47,8 +47,24 @@ def download_images(img_urls, dest_dir):
   with an img tag to show each local image file.
   Creates the directory if necessary.
   """
-  # +++your code here+++
+  html = """
+    <html>
+    <body>"""
+
+  if not os.path.exists(dest_dir):
+    os.mkdir(dest_dir)
+  for index, img_url in enumerate(img_urls):
+    urllib.urlretrieve(img_url, dest_dir + '/img' + str(index))
+    html += '<img src="img%d">' % index
   
+  html += """ 
+    </body>
+    </html>
+  """
+  file = open(dest_dir + '/index.html', 'w')
+  file.write(html)
+  file.close()
+
 
 def main():
   args = sys.argv[1:]
