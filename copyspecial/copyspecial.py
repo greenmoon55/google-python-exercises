@@ -19,13 +19,19 @@ import commands
 # Write functions and modify main() to call them
 def get_special_paths(dir):
   filenames = os.listdir(dir)
+  special_paths = []
   for filename in filenames:
     if re.search(r'__\w+__', filename): 
-      print os.path.abspath(os.path.join(dir, filename)) # absolute paths
-  return
+      special_paths.append(os.path.abspath(os.path.join(dir, filename))) # absolute paths
+  return special_paths
 
 
 def copy_to(paths, dir):
+  if not os.path.exists(dir): os.mkdir(dir)
+  for path in paths:
+    special_paths = get_special_paths(path)
+    for special_path in special_paths:
+      shutil.copy(special_path, dir)
   return
 
 def zip_to(paths, zippath):
@@ -63,7 +69,12 @@ def main():
 
   # +++your code here+++
   # Call your functions
-  get_special_paths(args[0])
+  if todir:
+    copy_to(args, todir)
+  else:
+    for dir in args:
+      for path in get_special_paths(dir):
+        print path
 
   
 if __name__ == "__main__":
